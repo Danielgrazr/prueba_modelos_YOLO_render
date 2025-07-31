@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusControl = document.getElementById('focus-control');
     const focusSlider = document.getElementById('focus-slider');
     
-    const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    const socket = io.connect(https://inspeccioniatapon6800.onrender.com);
 
     let isWaitingForResponse = false;
 
