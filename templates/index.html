@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detección con Servidor Python</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; }
+        #container { position: relative; display: inline-block; }
+        #canvas { position: absolute; top: 0; left: 0; }
+        /* --- ESTILOS AÑADIDOS PARA EL ENFOQUE --- */
+        #controls { margin: 15px; }
+        #focus-control { display: none; } /* Oculto por defecto */
+    </style>
+</head>
+<body>
+    <h1>Detección con Servidor Python</h1>
+
+    <div id="controls">
+        <div id="focus-control">
+            <label for="focus-slider">Enfoque:</label>
+            <input type="range" id="focus-slider" style="width: 300px;">
+        </div>
+    </div>
+
+    <div id="container">
+        <video id="video" autoplay playsinline width="640" height="480"></video>
+        <canvas id="canvas" width="640" height="480"></canvas>
+    </div>
+    <p id="status">Conectando al servidor...</p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
