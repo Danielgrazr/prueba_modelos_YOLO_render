@@ -40,7 +40,7 @@ def handle_image(data_image):
         return
 
     # Realizar la predicción
-    results = model(image, verbose=False, conf=0.5)
+    results = model(image, verbose=False, conf=0.1)
 
     # Extraer los resultados
     detections = []
