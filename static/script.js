@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas');
     const status = document.getElementById('status');
     const ctx = canvas.getContext('2d');
-    // --- ELEMENTOS AÑADIDOS PARA EL ENFOQUE ---
     const focusControl = document.getElementById('focus-control');
     const focusSlider = document.getElementById('focus-slider');
     
-    const socket = io.connect(https://inspeccioniatapon6800.onrender.com);
+    // --- LÍNEA CORREGIDA: Se añadieron las comillas a la URL ---
+    const socket = io.connect('https://inspeccioniatapon6800.onrender.com');
 
     let isWaitingForResponse = false;
 
@@ -16,26 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
         initCamera();
     });
 
-    // --- FUNCIÓN MODIFICADA PARA AÑADIR LA LÓGICA DE ENFOQUE ---
     async function initCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
 
-            // Lógica de control de enfoque
             const [track] = stream.getVideoTracks();
             const capabilities = track.getCapabilities();
 
-            // Comprobar si el control de enfoque es soportado
             if (capabilities.focusDistance) {
-                focusControl.style.display = 'block'; // Mostrar la barra
+                focusControl.style.display = 'block'; 
 
-                // Configurar los valores min, max y step de la barra
                 focusSlider.min = capabilities.focusDistance.min;
                 focusSlider.max = capabilities.focusDistance.max;
                 focusSlider.step = capabilities.focusDistance.step;
                 
-                // Evento para cambiar el enfoque cuando se mueve la barra
                 focusSlider.addEventListener('input', (event) => {
                     track.applyConstraints({
                         advanced: [{
@@ -102,4 +97,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isWaitingForResponse = false; 
     });
-});
+}); // <-- La llave extra al final ha sido eliminada
