@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusSlider = document.getElementById('focus-slider');
     
     console.log("Paso 2: Conectando al servidor en https://inspeccioniatapon6800.onrender.com");
-    const socket = io.connect('https://inspeccioniatapon6800.onrender.com');
+    // --- LÍNEA CORREGIDA: Forzamos el uso de WebSockets ---
+    const socket = io.connect('https://inspeccioniatapon6800.onrender.com', { transports: ['websocket'] });
 
     let isWaitingForResponse = false;
 
@@ -87,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     socket.on('response', (detections) => {
-        console.log("Respuesta del servidor recibida:", detections);
+        // Ya no necesitamos este log, lo comento para no llenar la consola
+        // console.log("Respuesta del servidor recibida:", detections);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         
