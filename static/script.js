@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Paso 1: El DOM se ha cargado. Iniciando script.");
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const status = document.getElementById('status');
@@ -6,25 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusControl = document.getElementById('focus-control');
     const focusSlider = document.getElementById('focus-slider');
     
-    // --- LÍNEA CORREGIDA: Se añadieron las comillas a la URL ---
+    console.log("Paso 2: Conectando al servidor en https://inspeccioniatapon6800.onrender.com");
     const socket = io.connect('https://inspeccioniatapon6800.onrender.com');
 
     let isWaitingForResponse = false;
 
     socket.on('connect', () => {
+        console.log("Paso 3: ¡Conexión exitosa con el servidor!");
         status.textContent = 'Conectado. Iniciando cámara...';
         initCamera();
     });
 
+    socket.on('connect_error', (err) => {
+        console.error("Error de conexión con el servidor:", err);
+        status.textContent = 'Error al conectar con el servidor.';
+    });
+
     async function initCamera() {
+        console.log("Paso 4: Iniciando la cámara...");
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
-
+            
             const [track] = stream.getVideoTracks();
             const capabilities = track.getCapabilities();
 
             if (capabilities.focusDistance) {
+                console.log("Control de enfoque soportado.");
                 focusControl.style.display = 'block'; 
 
                 focusSlider.min = capabilities.focusDistance.min;
@@ -40,15 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             } else {
-                console.log("El control manual de enfoque no es soportado por esta cámara/navegador.");
+                console.log("El control manual de enfoque no es soportado.");
             }
             
             video.onloadedmetadata = () => {
+                console.log("Paso 5: Cámara lista. Iniciando bucle de detección.");
                 status.textContent = 'Cámara activa. Detectando en tiempo real...';
                 requestAnimationFrame(detectionLoop);
             };
 
         } catch (e) {
+            console.error("Error al acceder a la cámara:", e);
             status.textContent = `Error al acceder a la cámara: ${e.message}`;
         }
     }
@@ -75,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     socket.on('response', (detections) => {
+        console.log("Respuesta del servidor recibida:", detections);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         
@@ -97,4 +110,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isWaitingForResponse = false; 
     });
-}); // <-- La llave extra al final ha sido eliminada
+});
